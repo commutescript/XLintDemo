@@ -1,0 +1,41 @@
+apply plugin: 'java-library'
+apply plugin: 'maven'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'com.android.tools.lint:lint-api:26.2.1'
+    compileOnly 'com.android.tools.lint:lint-checks:26.2.1'
+    testCompile "com.android.tools.lint:lint:26.2.1"
+    testCompile "com.android.tools.lint:lint-tests:26.2.1"
+    testCompile "com.android.tools:testutils:26.2.1"
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            // if you want upload your aar, replace the info.
+            repository(url: "http://xxx") {
+                authentication(userName: "xxx", password: "xxx")
+            }
+            pom.version = "0.1.0-alpha"
+            pom.artifactId = "xlint"
+            pom.groupId = "com.example.android"
+            pom.name = "$pom.artifactId-${pom.version}"
+            pom.packaging = 'jar'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+jar {
+    manifest {
+        attributes('Lint-Registry': 'com.example.xlint.XIssueRegister')
+    }
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"
